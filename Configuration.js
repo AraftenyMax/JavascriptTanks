@@ -27,6 +27,12 @@ const resourceNames = {
     }
 };
 
+const screenElemSelectType = {
+    htmlId: 0,
+    htmlClass: 1,
+    htmlTag: 2
+};
+
 const resources = {
     sprites: {
         [resourceNames.sprites.playerIdle]: 'http://localhost:9000/player-sprite.png', 
@@ -39,4 +45,5 @@ const cellSize = 40;
 const canvasWidth = 500;
 const canvasHeight = 500;
 
-export {keyCodes, mapMarkers, resources, canvasWidth, canvasHeight, resourceNames, cellSize};
+export {keyCodes, mapMarkers, resources, canvasWidth,
+    canvasHeight, resourceNames, cellSize, screenElemSelectType};

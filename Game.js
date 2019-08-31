@@ -1,8 +1,22 @@
-import CanvasProvider from './Render/CanvasProvider.js';
-import Tank from './GameObjects/Tank.js';
-import Player from './GameObjects/Player';
-import Renderer from './Render/Renderer.js';
+import ScreenManager from "./Screens/ScreenManager";
+import ResourceManagerInstance from "./GameComponents/ResourceManager";
 
+
+class Game {
+    constructor() {
+        this.init();
+        this.screenManager = new ScreenManager(ResourceManagerInstance);
+    }
+
+    init() {
+        this.loadingScreen = new LoadingScreen();
+        this.loadingScreen.start();
+        ResourceManagerInstance.loadResources().then(() => {
+            this.loadingScreen.hide();
+        });
+    }
+}
+/*
 class Game {
     constructor() {
         this.renderer = new Renderer(new CanvasProvider());
@@ -38,5 +52,5 @@ class Game {
         requestAnimationFrame(loop);
     }
 }
-
+*/
 export default Game;

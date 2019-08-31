@@ -1,5 +1,5 @@
 import RenderProvider from './RenderProvider';
-import {canvasWidth, canvasHeight} from '../Constants';
+import {canvasWidth, canvasHeight} from '../Configuration';
 
 class CanvasProvider extends RenderProvider {
     constructor() {

@@ -1,4 +1,4 @@
-import {resources} from '../Constants';
+import {resources} from '../Configuration';
 
 class ResourceLoader {
     constructor() {
@@ -14,7 +14,7 @@ class ResourceLoader {
         let responses = await Promise.all(spritePromises);
         for(let response of responses) {
             let spriteName = this.getSpriteName(response.url);
-            //let spriteUrl = URL.createObjectURL(response.blob());
+            let spriteUrl = URL.createObjectURL(response.blob());
             let spriteImage = document.createElement('img');
             spriteImage.src = spriteUrl; 
             this.resources.sprites[spriteName] = spriteImage;

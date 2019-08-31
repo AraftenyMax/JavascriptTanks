@@ -1,4 +1,4 @@
-import {cellSize} from '../Constants';
+import {cellSize} from '../Configuration';
 
 class GameObject {
     constructor() {

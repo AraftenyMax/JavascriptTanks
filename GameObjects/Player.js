@@ -1,7 +1,7 @@
 import Tank from "./Tank";
 import RenderObject from '../Render/RenderObject';
 import ResourceManagerInstance from '../GameComponents/ResourceManager';
-import {resourceNames} from '../Constants';
+import {resourceNames} from '../Configuration';
 
 class Player extends Tank {
     constructor(renderer, x, y) {

@@ -1,4 +1,4 @@
-import {resources} from '../Constants';
+import {resources} from '../Configuration';
 
 class ResourceManager {
     constructor() {
@@ -6,7 +6,12 @@ class ResourceManager {
             sprites: {},
             sounds: {}
         };
-        this.loadResources();
+        this.loadResources().then(() => {
+            console.log('Done', this.resources.sprites);
+            let image = this.resources.sprites['wall'];
+            document.getElementsByTagName('canvas')[0].getContext('2d').drawImage(image, 10, 10);
+            console.log('Now done.');
+        });
     }
 
     async loadResources() {
