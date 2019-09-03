@@ -8,28 +8,26 @@ class ResourceManager {
         };
         this.loadResources().then(() => {
             console.log('Done', this.resources.sprites);
-            let image = this.resources.sprites['wall'];
-            document.getElementsByTagName('canvas')[0].getContext('2d').drawImage(image, 10, 10);
             console.log('Now done.');
         });
     }
 
     async loadResources() {
         let spritePromises = [];
+        let imageBlobPromises = [];
         for (let spriteName in resources.sprites) {
             let spriteUrl = resources.sprites[spriteName];
             spritePromises.push(fetch(spriteUrl));
         }
         let responses = await Promise.all(spritePromises);
-        for (let response of responses) {
-            if (response.ok) {
-                let imageBlob = await response.blob();
-                let spriteURL = URL.createObjectURL(imageBlob);
-                let sprite = new Image();
-                sprite.src = spriteURL;
-                let spriteName = this.getSpriteName(response.url);
-                this.resources.sprites[spriteName] = sprite;
-            }
+        responses.map((response) => imageBlobPromises.push(response.blob()));
+        let imageBlobs = await Promise.all(imageBlobPromises);
+        for (let [index, imageBlob] of imageBlobs.entries()) {
+            let spriteURL = URL.createObjectURL(imageBlob);
+            let sprite = new Image();
+            sprite.src = spriteURL;
+            let spriteName = this.getSpriteName(responses[index].url);
+            this.resources.sprites[spriteName] = sprite;
         }
     }
 

@@ -3,6 +3,6 @@
         "@babel/preset-env", 
     ],
     "plugins": [
-        ["@babel/transform-runtime"], ["@babel/plugin-transform-parameters"]
+        ["@babel/transform-runtime"], ["@babel/plugin-transform-parameters"], ["@babel/plugin-proposal-class-properties"]
     ]
 }

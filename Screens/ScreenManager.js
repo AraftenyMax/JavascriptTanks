@@ -17,6 +17,8 @@ class ScreenManager {
         };
         this.screenParentContainer = null;
         this.documentBody = document.getElementsByTagName('body')[0];
+        this.sendIntent = this.sendIntent.bind(this);
+        this.moveNext = this.moveNext.bind(this);
         this.findScreenParent(containerInfo);
     }
 
@@ -32,7 +34,7 @@ class ScreenManager {
                 break;
             }
             case screenElemSelectType.htmlTag: {
-                element = document.getElementsByClassName(selector)[index];
+                element = document.getElementsByTagName(selector)[index];
                 break;
             }
             default: {
@@ -53,7 +55,7 @@ class ScreenManager {
             throw new Error(`Attempt to start screen which already is present: ${screenName}`);
         }
         let ScreenClass = this.screenClasses[screenName];
-        let screenInstance = new ScreenClass(ResourceManagerInstance, ...args);
+        let screenInstance = new ScreenClass(ResourceManagerInstance, this.sendIntent, this.moveNext,...args);
         return screenInstance;
     }
 
@@ -62,41 +64,66 @@ class ScreenManager {
         if (this.screenStack.length !== 0) {
             while (this.screenStack.length > 0) {
                 let scr = this.screenStack.pop();
-                scr.hide();
+                this.disposeScreen(scr.name);
             }
         }
         this.screenStack.push(screen);
         let screenRender = screen.getRender();
-        this.documentBody.append(screenRender);
+        this.screenParentContainer.append(screenRender);
+        screen.bindOnKeyEvents();
+    }
+
+    showLoadingScreen() {
+        this.showScreen(LoadingScreen.name);
     }
 
     showScreenModal(screenName, ...args) {
         let screen = this.getScreenInstance(screenName, ...args);
+        let screenRender = screen.getRender();
         this.screenStack.push(screen);
-        this.documentBody.append(screen);
+        this.documentBody.append(screenRender);
+        screen.bindOnKeyEvents();
     }
 
-    disposeScreen(currentScreenName, ...args) {
-        let currentScreenIndex = this.screenStack.findIndex((screen) => screen.name === currentScreenName);
-        let screen = this.screenStack.splice(currentScreenIndex, 1);
+    removeScreenFromStack(screenName) {
+        let screenIndex = this.screenStack.findIndex((screen) => screen.name === screenName);
+        let screen = this.screenStack.splice(screenIndex, 1)[0];
+        return screen;
+    }
+
+    disposeScreen(screenName, ...args) {
+        let screen = this.removeScreenFromStack(screenName);
         screen.dispose();
+        this.screenParentContainer.removeChild(screen.getRender());
     }
 
-    disposeScreenModal(currentScreenName, ...args) {
-        let screenIndex = this.screenStack.findIndex((elem) => elem.name === currentScreenName);
-        let screen = this.screenStack[screenIndex];
-        screen.hide();
-        this.screenStack.splice(screenIndex, 1);
+    disposeScreenModal(screenName, ...args) {
+        let screen = this.removeScreenFromStack(screenName);
+        screen.dispose();
+        this.documentBody.removeChild(screen.getRender());
     }
 
-    dispatchInput(keyCode) {
-        if (this.screenStack.length !== 0) {
-            let [screen] = this.screenStack.slice(-1);
-            screen.performAction(keyCode);
+    moveNext(currentScreenInfo, nextScreenInfo, ...args) {
+        let {currentScreenName, isCurrentModal = false} = currentScreenInfo;
+        let {nextScreenName, isNextModal = false} = nextScreenInfo;
+        if (!isCurrentModal) {
+            this.disposeScreen(currentScreenName);
+        } else {
+            this.disposeScreenModal(currentScreenName);
+        }
+        if (!isNextModal) {
+            this.showScreen(nextScreenName, ...args);
+        } else {
+            this.showScreenModal(nextScreenName, ...args);
         }
     }
 
-    displayErrorMessage(msg, ...args) {
+    sendIntent(fromScreen, toScreen, args) {
+        let screen = this.screenStack.find((scr) => scr.name === toScreen);
+        screen.receiveIntent(fromScreen, args);
+    }
+
+    showErrorMessage(msg, ...args) {
 
     }
 }

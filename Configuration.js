@@ -1,9 +1,19 @@
-let keyCodes = {
+const keyCodes = {
     moveUp: 38,
     moveDown: 40,
     moveLeft: 37,
     moveRight: 39,
     fire: 32,
+};
+
+const screenNames = {
+    loadingScreen: 'loadingscreen',
+    menuScreen: 'menuscreen',
+    missionSelectScreen: 'missionselectscreen',
+    missionScreen: 'missionscreen',
+    optionsScreen: 'optionsscreen',
+    statisticsScreen: 'statisticsscreen',
+    upgradeScreen: 'upgradescreen'
 };
 
 const mapMarkers = {
@@ -44,6 +54,10 @@ const resources = {
 const cellSize = 40;
 const canvasWidth = 500;
 const canvasHeight = 500;
+const keyEvent = 'keydown';
+const selectedMenuItemClass = 'selected-menu-item';
 
 export {keyCodes, mapMarkers, resources, canvasWidth,
-    canvasHeight, resourceNames, cellSize, screenElemSelectType};
+    canvasHeight, resourceNames, cellSize, screenElemSelectType, screenNames,
+    keyEvent, selectedMenuItemClass
+};

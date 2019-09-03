@@ -1,19 +1,23 @@
 import ScreenManager from "./Screens/ScreenManager";
+import {screenNames} from "./Configuration";
 import ResourceManagerInstance from "./GameComponents/ResourceManager";
 
 
 class Game {
     constructor() {
-        this.init();
         this.screenManager = new ScreenManager(ResourceManagerInstance);
+        this.init();
     }
 
     init() {
-        this.loadingScreen = new LoadingScreen();
-        this.loadingScreen.start();
+        this.screenManager.showLoadingScreen();
         ResourceManagerInstance.loadResources().then(() => {
-            this.loadingScreen.hide();
+            this.screenManager.sendIntent(null, screenNames.loadingScreen, {isReady: true});
         });
+    }
+
+    start() {
+        this.screenManager.showLoadingScreen();
     }
 }
 /*
