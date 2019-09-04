@@ -1,9 +1,11 @@
 class Screen {
-    constructor(width, height) {
+    constructor(sendIntent, moveNext, width, height) {
         this.width = width;
         this.height = height;
         this.isModal = false;
         this.isActive = false;
+        this.sendIntent = sendIntent;
+        this.moveNext = moveNext;
     }
 
     getRender() {
@@ -31,6 +33,10 @@ class Screen {
     }
 
     get name() {
+
+    }
+
+    get screenInfo() {
 
     }
 }

@@ -1,9 +1,23 @@
-const keyCodes = {
-    moveUp: 38,
-    moveDown: 40,
-    moveLeft: 37,
-    moveRight: 39,
-    fire: 32,
+const gameKeyNames = {
+    moveUp: 'moveup',
+    moveDown: 'movedown',
+    moveLeft: 'moveleft',
+    moveRight: 'moveright',
+    shoot: 'shoot',
+    pause: 'pause',
+    showKeySettings: 'showkeysettings',
+    showMenu: 'showmenu'
+};
+
+const gameKeyCodes = {
+    [gameKeyNames.moveUp]: 38,
+    [gameKeyNames.moveDown]: 40,
+    [gameKeyNames.moveLeft]: 37,
+    [gameKeyNames.moveRight]: 39,
+    [gameKeyNames.shoot]: 32,
+    [gameKeyNames.pause]: 80,
+    [gameKeyNames.showKeySettings]: 75,
+    [gameKeyNames.showMenu]: 27
 };
 
 const screenNames = {
@@ -12,6 +26,7 @@ const screenNames = {
     missionSelectScreen: 'missionselectscreen',
     missionScreen: 'missionscreen',
     optionsScreen: 'optionsscreen',
+    keyBindingChangeScreen: 'keyBindingChangeScreen',
     statisticsScreen: 'statisticsscreen',
     upgradeScreen: 'upgradescreen'
 };
@@ -27,9 +42,6 @@ const mapMarkers = {
 };
 
 const resourceNames = {
-    templateNames: {
-        player: 'player_'
-    },
     sprites: {
         playerIdle: 'player_idle',
         ground: 'ground',
@@ -57,7 +69,7 @@ const canvasHeight = 500;
 const keyEvent = 'keydown';
 const selectedMenuItemClass = 'selected-menu-item';
 
-export {keyCodes, mapMarkers, resources, canvasWidth,
+export {gameKeyCodes, mapMarkers, resources, canvasWidth,
     canvasHeight, resourceNames, cellSize, screenElemSelectType, screenNames,
-    keyEvent, selectedMenuItemClass
+    keyEvent, selectedMenuItemClass, gameKeyNames
 };

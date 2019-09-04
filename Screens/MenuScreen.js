@@ -2,7 +2,7 @@ import Screen from "./Screen";
 import {screenNames, keyEvent, selectedMenuItemClass} from "../Configuration";
 
 class MenuScreen extends Screen {
-    static name = 'menuscreen';
+    name = screenNames.menuScreen;
     constructor(ResourceManager, sendIntent, moveNext, ...args) {
         super();
         this.sendIntent = sendIntent;
@@ -18,7 +18,7 @@ class MenuScreen extends Screen {
                 nextScreenName: screenNames.statisticsScreen
             },
             {
-                text: 'Options',
+                text: 'Settings',
                 nextScreenName: screenNames.optionsScreen
             },
             {
@@ -37,14 +37,15 @@ class MenuScreen extends Screen {
     }
 
     selectItem(previousIndex, nextIndex) {
-        this.menuDOMItems.classList.remove(selectedMenuItemClass);
-        this.menuDOMItems.classList.add(nextIndex);
+        this.menuDOMItems[previousIndex].classList.remove(selectedMenuItemClass);
+        this.menuDOMItems[nextIndex].classList.add(selectedMenuItemClass);
     }
 
     arrowUpHandler() {
         if (this.selectedItemIndex === 0) {
-            let nextItemIndex = this.menuItemsInfo.length;
+            let nextItemIndex = this.menuItemsInfo.length - 1;
             this.selectItem(this.selectedItemIndex, nextItemIndex);
+            this.selectedItemIndex = nextItemIndex;
             return;
         }
         this.selectItem(this.selectedItemIndex, this.selectedItemIndex - 1);
@@ -52,9 +53,10 @@ class MenuScreen extends Screen {
     }
 
     arrowDownHandler() {
-        if (this.selectedItemIndex === this.menuItemsInfo.length) {
+        if (this.selectedItemIndex === this.menuDOMItems.length - 1) {
             let nextItemIndex = 0;
             this.selectItem(this.selectedItemIndex, nextItemIndex);
+            this.selectedItemIndex = nextItemIndex;
             return;
         }
         this.selectItem(this.selectedItemIndex, this.selectedItemIndex + 1);
@@ -79,13 +81,13 @@ class MenuScreen extends Screen {
     getRender() {
         if (!this.container) {
             this.container = document.createElement('div');
-            for (let index, menuItemInfo of this.menuItemsInfo.entries()) {
+            for (let [index, menuItemInfo] of this.menuItemsInfo.entries()) {
                 let menuItem = document.createElement('h2');
-                if (menuItemInfo.text === index) {
+                if (menuItemInfo.text === this.menuItemsInfo[this.selectedItemIndex].text) {
                     menuItem.classList.add(selectedMenuItemClass);
                 }
-                menuItem.innerText = menuItem.text;
-                this.menuDOMItems.append(menuItem);
+                menuItem.innerText = menuItemInfo.text;
+                this.menuDOMItems.push(menuItem);
                 this.container.append(menuItem);
             }
         }

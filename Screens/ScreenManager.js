@@ -1,8 +1,8 @@
 import {screenElemSelectType} from "../Configuration";
 import LoadingScreen from "./LoadingScreen";
 import MenuScreen from "./MenuScreen";
-import MissionListScreen from "./MissionListScreen";
-import MissionScreen from "./MissionScreen";
+import OptionsScreen from './OptionsScreen';
+import KeyBindingChangeScreen from "./KeyBindingChangeScreen";
 import ResourceManagerInstance from "../GameComponents/ResourceManager";
 
 class ScreenManager {
@@ -12,8 +12,8 @@ class ScreenManager {
         this.screenClasses = {
             [LoadingScreen.name]: LoadingScreen,
             [MenuScreen.name]: MenuScreen,
-            [MissionListScreen.name]: MissionListScreen,
-            [MissionScreen.name]: MissionScreen
+            [OptionsScreen.name]: OptionsScreen,
+            [KeyBindingChangeScreen.name]: KeyBindingChangeScreen
         };
         this.screenParentContainer = null;
         this.documentBody = document.getElementsByTagName('body')[0];
@@ -47,7 +47,7 @@ class ScreenManager {
         this.screenParentContainer = element;
     }
 
-    getScreenInstance(screenName, ...args) {
+    getScreenInstance(screenName, args) {
         if (!(screenName in this.screenClasses)) {
             throw new Error(`Unknown screen name: ${screenName}`);
         }
@@ -55,12 +55,12 @@ class ScreenManager {
             throw new Error(`Attempt to start screen which already is present: ${screenName}`);
         }
         let ScreenClass = this.screenClasses[screenName];
-        let screenInstance = new ScreenClass(ResourceManagerInstance, this.sendIntent, this.moveNext,...args);
+        let screenInstance = new ScreenClass(ResourceManagerInstance, this.sendIntent, this.moveNext, args);
         return screenInstance;
     }
 
-    showScreen(screenName, ...args) {
-        let screen = this.getScreenInstance(screenName, ...args);
+    showScreen(screenName, args) {
+        let screen = this.getScreenInstance(screenName, args);
         if (this.screenStack.length !== 0) {
             while (this.screenStack.length > 0) {
                 let scr = this.screenStack.pop();
@@ -77,8 +77,8 @@ class ScreenManager {
         this.showScreen(LoadingScreen.name);
     }
 
-    showScreenModal(screenName, ...args) {
-        let screen = this.getScreenInstance(screenName, ...args);
+    showScreenModal(screenName, args) {
+        let screen = this.getScreenInstance(screenName, args);
         let screenRender = screen.getRender();
         this.screenStack.push(screen);
         this.documentBody.append(screenRender);
@@ -91,19 +91,19 @@ class ScreenManager {
         return screen;
     }
 
-    disposeScreen(screenName, ...args) {
+    disposeScreen(screenName, args) {
         let screen = this.removeScreenFromStack(screenName);
         screen.dispose();
         this.screenParentContainer.removeChild(screen.getRender());
     }
 
-    disposeScreenModal(screenName, ...args) {
+    disposeScreenModal(screenName, args) {
         let screen = this.removeScreenFromStack(screenName);
         screen.dispose();
         this.documentBody.removeChild(screen.getRender());
     }
 
-    moveNext(currentScreenInfo, nextScreenInfo, ...args) {
+    moveNext(currentScreenInfo, nextScreenInfo, args) {
         let {currentScreenName, isCurrentModal = false} = currentScreenInfo;
         let {nextScreenName, isNextModal = false} = nextScreenInfo;
         if (!isCurrentModal) {
@@ -112,9 +112,9 @@ class ScreenManager {
             this.disposeScreenModal(currentScreenName);
         }
         if (!isNextModal) {
-            this.showScreen(nextScreenName, ...args);
+            this.showScreen(nextScreenName, args);
         } else {
-            this.showScreenModal(nextScreenName, ...args);
+            this.showScreenModal(nextScreenName, args);
         }
     }
 
