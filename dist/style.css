@@ -9,3 +9,10 @@
 .selected-menu-item {
     color: green;
 }
+
+.modal-window {
+    position: absolute;
+    width: 640px;
+    height: 480px;
+    background: grey;
+}

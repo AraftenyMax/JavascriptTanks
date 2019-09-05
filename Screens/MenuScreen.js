@@ -1,8 +1,9 @@
 import Screen from "./Screen";
-import {screenNames, keyEvent, selectedMenuItemClass} from "../Configuration";
+import {screenNames, selectedMenuItemClass} from "../Configuration";
+import {keyEvent} from "../KeyboardSettings";
 
 class MenuScreen extends Screen {
-    name = screenNames.menuScreen;
+    static type = screenNames.menuScreen;
     constructor(ResourceManager, sendIntent, moveNext, ...args) {
         super();
         this.sendIntent = sendIntent;

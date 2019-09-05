@@ -1,9 +1,12 @@
+import {keyEvent} from "../KeyboardSettings";
+
 class Screen {
-    constructor(sendIntent, moveNext, width, height) {
+    constructor(ResourceManager, sendIntent, moveNext, width, height) {
         this.width = width;
         this.height = height;
         this.isModal = false;
         this.isActive = false;
+        this.ResourceManager = ResourceManager;
         this.sendIntent = sendIntent;
         this.moveNext = moveNext;
     }
@@ -16,19 +19,19 @@ class Screen {
 
     }
 
+    bindOnKeyEvents() {
+        document.addEventListener(keyEvent, this.dispatchKeyEvents);
+    }
+
+    removeEventsHandler() {
+        document.removeEventListener(keyEvent, this.dispatchKeyEvents);
+    }
+
     dispatchKeyEvents() {
 
     }
 
-    bindOnKeyEvents() {
-
-    }
-
     receiveIntent() {
-
-    }
-
-    removeEventsHandler() {
 
     }
 

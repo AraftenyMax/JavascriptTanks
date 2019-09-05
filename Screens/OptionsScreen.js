@@ -1,9 +1,9 @@
 import Screen from "./Screen";
-import {gameKeyNames, gameKeyCodes, keyEvent, selectedMenuItemClass, screenNames} from "../Configuration";
-import KeyboardScheme from "../KeyboardScheme";
+import {selectedMenuItemClass, screenNames} from "../Configuration";
+import {KeyboardScheme, GameKeyCodes, GameKeyNames, keyEvent} from "../KeyboardSettings";
 
 class OptionsScreen extends Screen {
-    name = screenNames.optionsScreen;
+    static type = screenNames.optionsScreen;
     constructor(resourceManager, sendIntent, moveNext) {
         super(sendIntent, moveNext);
         this.container = null;
@@ -11,35 +11,35 @@ class OptionsScreen extends Screen {
         this.selectedItemIndex = 0;
         this.keyDescriptions = [
             {
-                name: gameKeyNames.moveUp,
+                name: GameKeyNames.moveUp,
                 description: 'Move up'
             },
             {
-                name: gameKeyNames.moveDown,
+                name: GameKeyNames.moveDown,
                 description: 'Move down',
             },
             {
-                name: gameKeyNames.moveLeft,
+                name: GameKeyNames.moveLeft,
                 description: 'Move left',
             },
             {
-                name: gameKeyNames.moveRight,
+                name: GameKeyNames.moveRight,
                 description: 'Move right',
             },
             {
-                name: gameKeyNames.pause,
+                name: GameKeyNames.pause,
                 description: 'Pause game',
             },
             {
-                name: gameKeyNames.showMenu,
+                name: GameKeyNames.showMenu,
                 description: 'Show game menu(pauses game)',
             },
             {
-                name: gameKeyNames.showKeySettings,
+                name: GameKeyNames.showKeySettings,
                 description: 'Show keyboard bindings',
             },
             {
-                name: gameKeyNames.shoot,
+                name: GameKeyNames.shoot,
                 description: 'Shoot',
             }
         ];
@@ -89,14 +89,14 @@ class OptionsScreen extends Screen {
             this.selectedItemIndex = nextItemIndex;
             return;
         }
-        this.selectedItemIndex(this.selectedItemIndex, this.selectedItemIndex + 1);
+        this.selectItem(this.selectedItemIndex, this.selectedItemIndex + 1);
         this.selectedItemIndex++;
     }
 
     enterHandler() {
         let keyName = this.keyDescriptions[this.selectedItemIndex].name;
         let args = {
-            keyCode: gameKeyCodes[keyName]
+            keyCode: GameKeyCodes[keyName]
         };
         let screenName = this.name;
         let nextScreenName = screenNames.keyBindingChangeScreen;
@@ -119,9 +119,11 @@ class OptionsScreen extends Screen {
                 let keyDescriptionElement = document.createElement('p');
                 let keyCodeElement = document.createElement('p');
                 keyDescriptionElement.innerText = keyInfo.description;
-                let keyCode = gameKeyCodes[keyInfo.name];
+                let keyCode = GameKeyCodes[keyInfo.name];
                 keyCodeElement.innerText = KeyboardScheme[keyCode];
                 let keyElement = document.createElement('div');
+                keyElement.append(keyDescriptionElement, keyCodeElement);
+                this.menuDOMItems.push(keyElement);
                 if (index === this.selectedItemIndex) {
                     keyElement.classList.add(selectedMenuItemClass);
                 }
@@ -174,4 +176,4 @@ class OptionsScreen extends Screen {
     }
 }
 
-export default Screen;
+export default OptionsScreen;

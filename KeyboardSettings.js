@@ -69,4 +69,28 @@ const KeyboardScheme = {
     105: "NUMPAD9", // [105]
 };
 
-export default KeyboardScheme;
+const GameKeyNames = {
+    moveUp: 'moveup',
+    moveDown: 'movedown',
+    moveLeft: 'moveleft',
+    moveRight: 'moveright',
+    shoot: 'shoot',
+    pause: 'pause',
+    showKeySettings: 'showkeysettings',
+    showMenu: 'showmenu'
+};
+const GameKeyCodes = {
+    [GameKeyNames.moveUp]: 38,
+    [GameKeyNames.moveDown]: 40,
+    [GameKeyNames.moveLeft]: 37,
+    [GameKeyNames.moveRight]: 39,
+    [GameKeyNames.shoot]: 32,
+    [GameKeyNames.pause]: 80,
+    [GameKeyNames.showKeySettings]: 75,
+    [GameKeyNames.showMenu]: 27
+};
+const keyEvent = 'keydown';
+export {keyEvent};
+export {GameKeyCodes};
+export {GameKeyNames};
+export {KeyboardScheme};

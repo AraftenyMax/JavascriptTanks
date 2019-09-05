@@ -1,8 +1,9 @@
 import Screen from './Screen';
-import {screenNames, keyEvent} from "../Configuration";
+import {screenNames} from "../Configuration";
+import {keyEvent} from "../KeyboardSettings";
 
 class LoadingScreen extends Screen {
-    static name = screenNames.loadingScreen;
+    static type = screenNames.loadingScreen;
     constructor(resourceManager, sendIntent, moveNext, ...args) {
         super();
         this.sendIntent = sendIntent;
@@ -10,7 +11,7 @@ class LoadingScreen extends Screen {
         this.container = null;
         this.isReady = false;
         this.msgDOMElement = null;
-        this.dispatchKeyEvents = this.dispatchKeyEvents.bind(this);
+        this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.texts = {
             loading: 'Loading...',
             ready: 'Ready. Press space to continue.'
@@ -72,15 +73,15 @@ class LoadingScreen extends Screen {
             }
         }
     }
-
+    /*
     bindOnKeyEvents() {
-        document.addEventListener(keyEvent, this.dispatchKeyEvents);
+        document.addEventListener(keyEvent, this.keyboardHandler);
     }
 
     removeEventsHandler() {
-        document.removeEventListener(keyEvent, this.dispatchKeyEvents);
+        document.removeEventListener(keyEvent, this.keyboardHandler);
     }
-
+    */
     dispose() {
         super.dispose();
         this.removeEventsHandler();

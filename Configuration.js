@@ -1,25 +1,3 @@
-const gameKeyNames = {
-    moveUp: 'moveup',
-    moveDown: 'movedown',
-    moveLeft: 'moveleft',
-    moveRight: 'moveright',
-    shoot: 'shoot',
-    pause: 'pause',
-    showKeySettings: 'showkeysettings',
-    showMenu: 'showmenu'
-};
-
-const gameKeyCodes = {
-    [gameKeyNames.moveUp]: 38,
-    [gameKeyNames.moveDown]: 40,
-    [gameKeyNames.moveLeft]: 37,
-    [gameKeyNames.moveRight]: 39,
-    [gameKeyNames.shoot]: 32,
-    [gameKeyNames.pause]: 80,
-    [gameKeyNames.showKeySettings]: 75,
-    [gameKeyNames.showMenu]: 27
-};
-
 const screenNames = {
     loadingScreen: 'loadingscreen',
     menuScreen: 'menuscreen',
@@ -66,10 +44,12 @@ const resources = {
 const cellSize = 40;
 const canvasWidth = 500;
 const canvasHeight = 500;
-const keyEvent = 'keydown';
+const defaultModalWidth = 640;
+const defaultModalHeight = 480;
 const selectedMenuItemClass = 'selected-menu-item';
+const modalWindowClass = 'modal-window';
 
-export {gameKeyCodes, mapMarkers, resources, canvasWidth,
+export {mapMarkers, resources, canvasWidth,
     canvasHeight, resourceNames, cellSize, screenElemSelectType, screenNames,
-    keyEvent, selectedMenuItemClass, gameKeyNames
+    selectedMenuItemClass, modalWindowClass, defaultModalHeight, defaultModalWidth
 };

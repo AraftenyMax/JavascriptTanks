@@ -1,19 +1,21 @@
-import {screenElemSelectType} from "../Configuration";
+import {screenElemSelectType, modalWindowClass} from "../Configuration";
 import LoadingScreen from "./LoadingScreen";
 import MenuScreen from "./MenuScreen";
 import OptionsScreen from './OptionsScreen';
 import KeyBindingChangeScreen from "./KeyBindingChangeScreen";
+import InputManager from "../GameComponents/InputManager";
 import ResourceManagerInstance from "../GameComponents/ResourceManager";
 
 class ScreenManager {
     constructor(resourceManager, containerInfo = {}) {
         this.resourceManager = resourceManager;
         this.screenStack = [];
+        this.inputManager = new InputManager();
         this.screenClasses = {
-            [LoadingScreen.name]: LoadingScreen,
-            [MenuScreen.name]: MenuScreen,
-            [OptionsScreen.name]: OptionsScreen,
-            [KeyBindingChangeScreen.name]: KeyBindingChangeScreen
+            [LoadingScreen.type]: LoadingScreen,
+            [MenuScreen.type]: MenuScreen,
+            [OptionsScreen.type]: OptionsScreen,
+            [KeyBindingChangeScreen.type]: KeyBindingChangeScreen
         };
         this.screenParentContainer = null;
         this.documentBody = document.getElementsByTagName('body')[0];
@@ -68,13 +70,14 @@ class ScreenManager {
             }
         }
         this.screenStack.push(screen);
+        this.inputManager.unsubscribeInputEvent()
         let screenRender = screen.getRender();
         this.screenParentContainer.append(screenRender);
         screen.bindOnKeyEvents();
     }
 
     showLoadingScreen() {
-        this.showScreen(LoadingScreen.name);
+        this.showScreen(LoadingScreen.type);
     }
 
     showScreenModal(screenName, args) {
@@ -82,11 +85,12 @@ class ScreenManager {
         let screenRender = screen.getRender();
         this.screenStack.push(screen);
         this.documentBody.append(screenRender);
+        screenRender.classList.add(modalWindowClass);
         screen.bindOnKeyEvents();
     }
 
     removeScreenFromStack(screenName) {
-        let screenIndex = this.screenStack.findIndex((screen) => screen.name === screenName);
+        let screenIndex = this.screenStack.findIndex((screen) => screen.type === screenName);
         let screen = this.screenStack.splice(screenIndex, 1)[0];
         return screen;
     }
@@ -119,6 +123,7 @@ class ScreenManager {
     }
 
     sendIntent(fromScreen, toScreen, args) {
+        console.log(toScreen);
         let screen = this.screenStack.find((scr) => scr.name === toScreen);
         screen.receiveIntent(fromScreen, args);
     }
