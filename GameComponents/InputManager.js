@@ -28,6 +28,10 @@ class InputManager {
     }
 
     notify(event) {
+        if (this.mode === this.modes.singleScreen) {
+            this.subscribers[this.subscribers.length - 1](event);
+            return;
+        }
         for (let handler of this.subscribers) {
             handler(event);
         }
@@ -48,14 +52,11 @@ class InputManager {
         this.mode = mode;
     }
 
-    registerScreen(newHandler) {
-        if (!newHandler) {
+    registerScreen(handler) {
+        if (!handler) {
             throw new Error('New handler is null.');
         }
-        if (this.mode === this.modes.singleScreen) {
-            let
-        }
-        this.subscribeOnInputEvent(newHandler);
+        this.subscribeOnInputEvent(handler);
     }
 }
 

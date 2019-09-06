@@ -10,6 +10,8 @@ class LoadingScreen extends Screen {
         this.moveNext = moveNext;
         this.container = null;
         this.isReady = false;
+        this.message = 'Message';
+        this.method = () => console.log(this.message);
         this.msgDOMElement = null;
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.texts = {
@@ -19,6 +21,10 @@ class LoadingScreen extends Screen {
         this.keyCodeEvents = {
             space: 32
         };
+    }
+
+    method1() {
+        console.log(this.message);
     }
 
     spaceHandler() {

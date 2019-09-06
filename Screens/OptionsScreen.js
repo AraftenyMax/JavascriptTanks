@@ -7,7 +7,7 @@ class OptionsScreen extends Screen {
     constructor(resourceManager, sendIntent, moveNext) {
         super(sendIntent, moveNext);
         this.container = null;
-        this.dispatchKeyEvents = this.dispatchKeyEvents.bind(this);
+        this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.selectedItemIndex = 0;
         this.keyDescriptions = [
             {
@@ -156,19 +156,10 @@ class OptionsScreen extends Screen {
     }
 
     dispose() {
-        this.removeEventsHandler();
     }
 
     receiveIntent(args) {
 
-    }
-
-    bindOnKeyEvents() {
-        document.addEventListener(keyEvent, this.dispatchKeyEvents);
-    }
-
-    removeEventsHandler() {
-        document.removeEventListener(keyEvent, this.dispatchKeyEvents);
     }
 
     get name() {

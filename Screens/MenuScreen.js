@@ -8,7 +8,7 @@ class MenuScreen extends Screen {
         super();
         this.sendIntent = sendIntent;
         this.moveNext = moveNext;
-        this.dispatchKeyEvents = this.dispatchKeyEvents.bind(this);
+        this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.menuItemsInfo = [
             {
                 text: 'Play',
@@ -96,7 +96,7 @@ class MenuScreen extends Screen {
     }
 
     dispose() {
-        this.removeEventsHandler();
+
     }
 
     dispatchKeyEvents(event) {
@@ -116,16 +116,8 @@ class MenuScreen extends Screen {
         }
     }
 
-    bindOnKeyEvents() {
-        document.addEventListener(keyEvent, this.dispatchKeyEvents);
-    }
-
     receiveIntent() {
 
-    }
-
-    removeEventsHandler() {
-        document.removeEventListener(keyEvent, this.dispatchKeyEvents);
     }
 
     get name() {

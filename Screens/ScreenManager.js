@@ -70,10 +70,9 @@ class ScreenManager {
             }
         }
         this.screenStack.push(screen);
-        this.inputManager.unsubscribeInputEvent()
         let screenRender = screen.getRender();
         this.screenParentContainer.append(screenRender);
-        screen.bindOnKeyEvents();
+        this.inputManager.subscribeOnInputEvent(screen.inputHandler);
     }
 
     showLoadingScreen() {
@@ -86,7 +85,7 @@ class ScreenManager {
         this.screenStack.push(screen);
         this.documentBody.append(screenRender);
         screenRender.classList.add(modalWindowClass);
-        screen.bindOnKeyEvents();
+        this.inputManager.unsubscribeInputEvent(screen.inputHandler);
     }
 
     removeScreenFromStack(screenName) {
@@ -101,20 +100,10 @@ class ScreenManager {
         this.screenParentContainer.removeChild(screen.getRender());
     }
 
-    disposeScreenModal(screenName, args) {
-        let screen = this.removeScreenFromStack(screenName);
-        screen.dispose();
-        this.documentBody.removeChild(screen.getRender());
-    }
-
     moveNext(currentScreenInfo, nextScreenInfo, args) {
         let {currentScreenName, isCurrentModal = false} = currentScreenInfo;
         let {nextScreenName, isNextModal = false} = nextScreenInfo;
-        if (!isCurrentModal) {
-            this.disposeScreen(currentScreenName);
-        } else {
-            this.disposeScreenModal(currentScreenName);
-        }
+        this.disposeScreen(currentScreenName);
         if (!isNextModal) {
             this.showScreen(nextScreenName, args);
         } else {
