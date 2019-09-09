@@ -49,7 +49,7 @@ class ScreenManager {
         this.screenParentContainer = element;
     }
 
-    getScreenInstance(screenName, args) {
+    getScreenInstance(screenName, ...args) {
         if (!(screenName in this.screenClasses)) {
             throw new Error(`Unknown screen name: ${screenName}`);
         }
@@ -57,12 +57,14 @@ class ScreenManager {
             throw new Error(`Attempt to start screen which already is present: ${screenName}`);
         }
         let ScreenClass = this.screenClasses[screenName];
-        let screenInstance = new ScreenClass(ResourceManagerInstance, this.sendIntent, this.moveNext, args);
+        let screenInstance = new ScreenClass(ResourceManagerInstance,
+            this.sendIntent, this.moveNext, screenName, ScreenClass.preferredWidth,
+            ScreenClass.preferredHeight, ...args);
         return screenInstance;
     }
 
-    showScreen(screenName, args) {
-        let screen = this.getScreenInstance(screenName, args);
+    showScreen(screenName, ...args) {
+        let screen = this.getScreenInstance(screenName, ...args);
         if (this.screenStack.length !== 0) {
             while (this.screenStack.length > 0) {
                 let scr = this.screenStack.pop();
@@ -79,11 +81,11 @@ class ScreenManager {
         this.showScreen(LoadingScreen.type);
     }
 
-    showScreenModal(screenName, args) {
-        let screen = this.getScreenInstance(screenName, args);
+    showScreenModal(screenName, ...args) {
+        let screen = this.getScreenInstance(screenName, ...args);
         let screenRender = screen.getRender();
         this.screenStack.push(screen);
-        this.documentBody.append(screenRender);
+        this.documentBody.prepend(screenRender);
         screenRender.classList.add(modalWindowClass);
         this.inputManager.unsubscribeInputEvent(screen.inputHandler);
     }
@@ -94,27 +96,27 @@ class ScreenManager {
         return screen;
     }
 
-    disposeScreen(screenName, args) {
+    disposeScreen(screenName, ...args) {
         let screen = this.removeScreenFromStack(screenName);
-        screen.dispose();
+        screen.dispose(...args);
         this.screenParentContainer.removeChild(screen.getRender());
     }
 
-    moveNext(currentScreenInfo, nextScreenInfo, args) {
-        let {currentScreenName, isCurrentModal = false} = currentScreenInfo;
-        let {nextScreenName, isNextModal = false} = nextScreenInfo;
-        this.disposeScreen(currentScreenName);
+    moveNext(currentScreenInfo, nextScreenInfo, ...args) {
+        let {name:currentScreenName, isModal:isCurrentModal = false} = currentScreenInfo;
+        let {name:nextScreenName, isModal:isNextModal = false} = nextScreenInfo;
         if (!isNextModal) {
-            this.showScreen(nextScreenName, args);
+            this.disposeScreen(currentScreenName);
+            this.showScreen(nextScreenName, ...args);
         } else {
-            this.showScreenModal(nextScreenName, args);
+            this.showScreenModal(nextScreenName, ...args);
         }
     }
 
-    sendIntent(fromScreen, toScreen, args) {
+    sendIntent(fromScreen, toScreen, ...args) {
         console.log(toScreen);
         let screen = this.screenStack.find((scr) => scr.name === toScreen);
-        screen.receiveIntent(fromScreen, args);
+        screen.receiveIntent(fromScreen, ...args);
     }
 
     showErrorMessage(msg, ...args) {

@@ -1,13 +1,13 @@
 import Screen from "./Screen";
-import {screenNames, selectedMenuItemClass} from "../Configuration";
+import {defaultWindowHeight, defaultWindowWidth, screenNames, selectedMenuItemClass} from "../Configuration";
 import {keyEvent} from "../KeyboardSettings";
 
 class MenuScreen extends Screen {
     static type = screenNames.menuScreen;
-    constructor(ResourceManager, sendIntent, moveNext, ...args) {
-        super();
-        this.sendIntent = sendIntent;
-        this.moveNext = moveNext;
+    static preferredWidth = defaultWindowWidth;
+    static preferredHeight = defaultWindowHeight;
+    constructor(ResourceManager, sendIntent, moveNext, name,...args) {
+        super(ResourceManager, sendIntent, moveNext, name);
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.menuItemsInfo = [
             {
@@ -65,15 +65,10 @@ class MenuScreen extends Screen {
     }
 
     enterHandler() {
-        let currentScreenName = this.name;
-        let isThisModal = this.isModal;
         let { nextScreenName, isModal = false }= this.menuItemsInfo[this.selectedItemIndex];
-        let currentScreenInfo = {
-            currentScreenName: currentScreenName,
-            isModal: isThisModal
-        };
+        let currentScreenInfo = this.screenInfo;
         let nextScreenInfo = {
-            nextScreenName: nextScreenName,
+            name: nextScreenName,
             isModal: isModal
         };
         this.moveNext(currentScreenInfo, nextScreenInfo);
@@ -118,10 +113,6 @@ class MenuScreen extends Screen {
 
     receiveIntent() {
 
-    }
-
-    get name() {
-        return screenNames.menuScreen;
     }
 }
 

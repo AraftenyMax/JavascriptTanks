@@ -1,17 +1,15 @@
 import Screen from './Screen';
-import {screenNames} from "../Configuration";
+import {screenNames, defaultWindowWidth, defaultWindowHeight} from "../Configuration";
 import {keyEvent} from "../KeyboardSettings";
 
 class LoadingScreen extends Screen {
     static type = screenNames.loadingScreen;
-    constructor(resourceManager, sendIntent, moveNext, ...args) {
-        super();
-        this.sendIntent = sendIntent;
-        this.moveNext = moveNext;
+    static preferredWidth = defaultWindowWidth;
+    static preferredHeight = defaultWindowHeight;
+    constructor(resourceManager, sendIntent, moveNext, name, ...args) {
+        super(resourceManager, sendIntent, moveNext, name, ...args);
         this.container = null;
         this.isReady = false;
-        this.message = 'Message';
-        this.method = () => console.log(this.message);
         this.msgDOMElement = null;
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.texts = {
@@ -23,20 +21,12 @@ class LoadingScreen extends Screen {
         };
     }
 
-    method1() {
-        console.log(this.message);
-    }
-
     spaceHandler() {
         console.log('Space is hit');
         if (this.isReady) {
-            let thisIsModal = this.isModal;
-            let currentScreenInfo = {
-                currentScreenName: screenNames.loadingScreen,
-                isModal: thisIsModal
-            };
+            let currentScreenInfo = this.screenInfo;
             let nextScreenInfo = {
-                nextScreenName: screenNames.menuScreen,
+                name: screenNames.menuScreen,
                 isModal: false
             };
             this.moveNext(currentScreenInfo, nextScreenInfo);
@@ -79,22 +69,9 @@ class LoadingScreen extends Screen {
             }
         }
     }
-    /*
-    bindOnKeyEvents() {
-        document.addEventListener(keyEvent, this.keyboardHandler);
-    }
 
-    removeEventsHandler() {
-        document.removeEventListener(keyEvent, this.keyboardHandler);
-    }
-    */
     dispose() {
         super.dispose();
-        this.removeEventsHandler();
-    }
-
-    get name() {
-        return screenNames.loadingScreen;
     }
 }
 

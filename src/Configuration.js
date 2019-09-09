@@ -46,10 +46,13 @@ const canvasWidth = 500;
 const canvasHeight = 500;
 const defaultModalWidth = 640;
 const defaultModalHeight = 480;
+const defaultWindowWidth = 640;
+const defaultWindowHeight = 'auto';
 const selectedMenuItemClass = 'selected-menu-item';
 const modalWindowClass = 'modal-window';
 
 export {mapMarkers, resources, canvasWidth,
     canvasHeight, resourceNames, cellSize, screenElemSelectType, screenNames,
-    selectedMenuItemClass, modalWindowClass, defaultModalHeight, defaultModalWidth
+    selectedMenuItemClass, modalWindowClass, defaultModalHeight, defaultModalWidth,
+    defaultWindowWidth, defaultWindowHeight
 };

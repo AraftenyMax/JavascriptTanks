@@ -1,7 +1,6 @@
-import {keyEvent} from "../KeyboardSettings";
-
 class Screen {
-    constructor(ResourceManager, sendIntent, moveNext, width, height) {
+    constructor(ResourceManager, sendIntent, moveNext, name, width, height) {
+        this.name = name;
         this.width = width;
         this.height = height;
         this.isModal = false;
@@ -19,28 +18,14 @@ class Screen {
 
     }
 
-    bindOnKeyEvents() {
-        document.addEventListener(keyEvent, this.dispatchKeyEvents);
-    }
-
-    removeEventsHandler() {
-        document.removeEventListener(keyEvent, this.dispatchKeyEvents);
-    }
-
-    dispatchKeyEvents() {
-
-    }
-
     receiveIntent() {
 
     }
 
-    get name() {
-
-    }
-
     get screenInfo() {
-
+        let name = this.name;
+        let modal = this.isModal;
+        return {name: name, modal};
     }
 }
 

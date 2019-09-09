@@ -1,48 +1,18 @@
 import Screen from "./Screen";
-import {selectedMenuItemClass, screenNames} from "../Configuration";
-import {KeyboardScheme, GameKeyCodes, GameKeyNames, keyEvent} from "../KeyboardSettings";
+import {selectedMenuItemClass, screenNames, defaultWindowWidth, defaultWindowHeight} from "../Configuration";
+import {KeyboardScheme, GameKeyCodes, ActionNames} from "../KeyboardSettings";
+import KeyboardManagerInstance from "../GameComponents/KeyboardManager";
 
 class OptionsScreen extends Screen {
     static type = screenNames.optionsScreen;
-    constructor(resourceManager, sendIntent, moveNext) {
-        super(sendIntent, moveNext);
+    static preferredWidth = defaultWindowWidth;
+    static preferredHeight = defaultWindowHeight;
+    constructor(resourceManager, sendIntent, moveNext, ...args) {
+        super(resourceManager, sendIntent, moveNext, ...args);
         this.container = null;
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.selectedItemIndex = 0;
-        this.keyDescriptions = [
-            {
-                name: GameKeyNames.moveUp,
-                description: 'Move up'
-            },
-            {
-                name: GameKeyNames.moveDown,
-                description: 'Move down',
-            },
-            {
-                name: GameKeyNames.moveLeft,
-                description: 'Move left',
-            },
-            {
-                name: GameKeyNames.moveRight,
-                description: 'Move right',
-            },
-            {
-                name: GameKeyNames.pause,
-                description: 'Pause game',
-            },
-            {
-                name: GameKeyNames.showMenu,
-                description: 'Show game menu(pauses game)',
-            },
-            {
-                name: GameKeyNames.showKeySettings,
-                description: 'Show keyboard bindings',
-            },
-            {
-                name: GameKeyNames.shoot,
-                description: 'Shoot',
-            }
-        ];
+        this.keyDescriptions = KeyboardManagerInstance.actionKeysInfo;
         this.menuDOMItems = [];
         this.keyCodes = {
             enter: 13,
@@ -58,12 +28,8 @@ class OptionsScreen extends Screen {
     }
 
     escapeHandler() {
-        let screenName = this.name;
         let nextScreenName = screenNames.menuScreen;
-        let currentScreenInfo = {
-            currentScreenName: screenName,
-            isModal: false
-        };
+        let currentScreenInfo = this.screenInfo;
         let nextScreenInfo = {
             nextScreenName: nextScreenName,
             isModal: false
@@ -94,19 +60,14 @@ class OptionsScreen extends Screen {
     }
 
     enterHandler() {
-        let keyName = this.keyDescriptions[this.selectedItemIndex].name;
+        let code = this.keyDescriptions[this.selectedItemIndex].code;
         let args = {
-            keyCode: GameKeyCodes[keyName]
+            code: code
         };
-        let screenName = this.name;
         let nextScreenName = screenNames.keyBindingChangeScreen;
-        let isThisModal = this.isModal;
-        let currentScreenInfo = {
-            currentScreenName: screenName,
-            isModal: isThisModal,
-        };
+        let currentScreenInfo = this.screenInfo;
         let nextScreenInfo = {
-            nextScreenName: nextScreenName,
+            name: nextScreenName,
             isModal: true
         };
         this.moveNext(currentScreenInfo, nextScreenInfo, args);
@@ -114,13 +75,13 @@ class OptionsScreen extends Screen {
 
     getRender() {
         if (!this.container) {
+            console.log(this.keyDescriptions);
             this.container = document.createElement('div');
             for (let [index, keyInfo] of this.keyDescriptions.entries()) {
                 let keyDescriptionElement = document.createElement('p');
                 let keyCodeElement = document.createElement('p');
                 keyDescriptionElement.innerText = keyInfo.description;
-                let keyCode = GameKeyCodes[keyInfo.name];
-                keyCodeElement.innerText = KeyboardScheme[keyCode];
+                keyCodeElement.innerText = KeyboardManagerInstance.getKeyNameByCode(keyInfo.code);
                 let keyElement = document.createElement('div');
                 keyElement.append(keyDescriptionElement, keyCodeElement);
                 this.menuDOMItems.push(keyElement);
@@ -156,14 +117,11 @@ class OptionsScreen extends Screen {
     }
 
     dispose() {
+
     }
 
     receiveIntent(args) {
 
-    }
-
-    get name() {
-        return screenNames.optionsScreen;
     }
 }
 
