@@ -7,9 +7,9 @@ class KeyBindingChangeScreen extends Screen {
     static preferredWidth = defaultModalWidth;
     static preferredHeight = defaultModalHeight;
 
-    constructor(resourceManager, sendIntent, moveNext,
+    constructor(resourceManager, sendIntent, moveNext, fallBack,
                 name, width, height, ...args) {
-        super(resourceManager, sendIntent, moveNext, name, width, height);
+        super(resourceManager, sendIntent, moveNext, fallBack, name, width, height);
         this.container = null;
         this.pressedKeyElement = null;
         this.msgAvailElem = null;
@@ -26,6 +26,10 @@ class KeyBindingChangeScreen extends Screen {
             waitingForInput: 0,
             waitingForSuccessPrompt: 1,
         };
+        this.keyCodes = {
+            enter: KeyboardManagerInstance.getKeyCodeByName('Enter'),
+            escape: KeyboardManagerInstance.getKeyCodeByName('Escape')
+        };
         let currentKeyCode = args[0].code;
         this.currentKeyInfo = this.getKeyInfo(currentKeyCode);
         this.nextKey = null;
@@ -34,13 +38,14 @@ class KeyBindingChangeScreen extends Screen {
     }
 
     changeState(state, ...args) {
-        if (!Object.keys(state).includes(state)) {
+        if (!Object.values(this.states).includes(state)) {
             throw new Error('Attempt to set unknown state');
         }
         switch (state) {
             case this.states.waitingForInput: {
-                this.pressedKeyElement.innerText = '';
+                this.pressedKeyElement.innerText = this.messages.pressedKey;
                 this.msgAvailElem.innerText = this.messages.waitingForInput;
+                this.nextKey = null;
                 break;
             }
             case this.states.waitingForSuccessPrompt: {
@@ -48,8 +53,10 @@ class KeyBindingChangeScreen extends Screen {
                 let {name: keyName} = KeyboardManagerInstance.getKeyInfoByCode(keyCode);
                 this.pressedKeyElement.innerText = this.messages.pressedKey + keyName;
                 this.msgAvailElem.innerText = this.messages.keyIsFree;
+                this.nextKey = keyCode;
             }
         }
+        this._state = state;
     }
 
     waitingForInputHandler(keyCode) {
@@ -57,8 +64,10 @@ class KeyBindingChangeScreen extends Screen {
             if (!KeyboardManagerInstance.isKeyAvailableForBind(keyCode)) {
                 this.msgAvailElem.innerText = this.messages.keyIsNotAvailable;
             }
-            if (!KeyboardManagerInstance.isKeyNotBindAlready(keyCode)) {
+            if (KeyboardManagerInstance.isKeyAlreadyBound(keyCode)) {
                 let {action} = KeyboardManagerInstance.getActionKeyInfoByCode(keyCode);
+                let {name} = KeyboardManagerInstance.getKeyInfoByCode(keyCode);
+                this.pressedKeyElement.innerText = this.messages.pressedKey + name;
                 this.msgAvailElem.innerText = this.messages.keyIsBound + action;
             }
             return;
@@ -67,9 +76,26 @@ class KeyBindingChangeScreen extends Screen {
         this.changeState(this.states.waitingForSuccessPrompt, payload);
     }
 
+    enterHandler() {
+        KeyboardManagerInstance.bindKeyToAction(this.currentKeyInfo.name, this.nextKey);
+        let currentScreenInfo = this.currentKeyInfo;
+        let nextScreenInfo = null;
+        this.fallBack(currentScreenInfo);
+    }
+
+    escapeHandler() {
+        this.changeState(this.states.waitingForInput);
+    }
+
     waitingForPromptHandler(keyCode) {
-        KeyboardManagerInstance.bindKeyToAction(this.currentKeyInfo.action, keyCode);
-        let currentScreenInfo = this.screenInfo;
+        switch (keyCode) {
+            case this.keyCodes.enter:
+                this.enterHandler();
+                break;
+            case this.keyCodes.escape:
+                this.escapeHandler();
+                break;
+        }
     }
 
     dispatchKeyEvents(event) {
@@ -86,22 +112,19 @@ class KeyBindingChangeScreen extends Screen {
         }
     }
 
-    enterHandler() {
-
-    }
-
     getKeyInfo(keyCode) {
-        let {action} = KeyboardManagerInstance.getActionKeyInfoByCode(keyCode);
-        let {name: keyName} = KeyboardManagerInstance.getKeyInfoByCode(keyCode);
+        let {action, name} = KeyboardManagerInstance.getActionKeyInfoByCode(keyCode);
+        let {name:keyName} = KeyboardManagerInstance.getKeyInfoByCode(keyCode);
         return {
             keyCode: keyCode,
+            keyName: keyName,
             action: action,
-            keyName: keyName
+            name: name
         };
     }
 
     getKeyInfoElement() {
-        let keyActionText = this.currentKeyInfo.description;
+        let keyActionText = this.currentKeyInfo.action;
         let keyActionElement = document.createElement('p');
         keyActionElement.innerText = this.messages.actionDescription + keyActionText;
         return keyActionElement;

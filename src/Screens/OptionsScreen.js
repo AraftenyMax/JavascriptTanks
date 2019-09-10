@@ -1,14 +1,14 @@
 import Screen from "./Screen";
 import {selectedMenuItemClass, screenNames, defaultWindowWidth, defaultWindowHeight} from "../Configuration";
-import {KeyboardScheme, GameKeyCodes, ActionNames} from "../KeyboardSettings";
+import {KeyboardScheme, ActionsInfo, ActionNames} from "../KeyboardSettings";
 import KeyboardManagerInstance from "../GameComponents/KeyboardManager";
 
 class OptionsScreen extends Screen {
     static type = screenNames.optionsScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
-    constructor(resourceManager, sendIntent, moveNext, ...args) {
-        super(resourceManager, sendIntent, moveNext, ...args);
+    constructor(resourceManager, sendIntent, moveNext, fallBack, name, ...args) {
+        super(resourceManager, sendIntent, moveNext, fallBack, name, ...args);
         this.container = null;
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.selectedItemIndex = 0;
@@ -28,10 +28,9 @@ class OptionsScreen extends Screen {
     }
 
     escapeHandler() {
-        let nextScreenName = screenNames.menuScreen;
         let currentScreenInfo = this.screenInfo;
         let nextScreenInfo = {
-            nextScreenName: nextScreenName,
+            name: screenNames.menuScreen,
             isModal: false
         };
         this.moveNext(currentScreenInfo, nextScreenInfo);
@@ -73,25 +72,40 @@ class OptionsScreen extends Screen {
         this.moveNext(currentScreenInfo, nextScreenInfo, args);
     }
 
+    fillOptionsList() {
+        let itemsList = [];
+        for (let [index, keyInfo] of this.keyDescriptions.entries()) {
+            let keyDescriptionElement = document.createElement('p');
+            let keyCodeElement = document.createElement('p');
+            keyDescriptionElement.innerText = keyInfo.action;
+            keyCodeElement.innerText = KeyboardManagerInstance.getKeyNameByCode(keyInfo.code);
+            let keyElement = document.createElement('div');
+            keyElement.append(keyDescriptionElement, keyCodeElement);
+            this.menuDOMItems.push(keyElement);
+            if (index === this.selectedItemIndex) {
+                keyElement.classList.add(selectedMenuItemClass);
+            }
+            this.container.append(keyElement);
+        }
+        return itemsList;
+    }
+
     getRender() {
         if (!this.container) {
-            console.log(this.keyDescriptions);
             this.container = document.createElement('div');
-            for (let [index, keyInfo] of this.keyDescriptions.entries()) {
-                let keyDescriptionElement = document.createElement('p');
-                let keyCodeElement = document.createElement('p');
-                keyDescriptionElement.innerText = keyInfo.description;
-                keyCodeElement.innerText = KeyboardManagerInstance.getKeyNameByCode(keyInfo.code);
-                let keyElement = document.createElement('div');
-                keyElement.append(keyDescriptionElement, keyCodeElement);
-                this.menuDOMItems.push(keyElement);
-                if (index === this.selectedItemIndex) {
-                    keyElement.classList.add(selectedMenuItemClass);
-                }
-                this.container.append(keyElement);
-            }
+            this.fillOptionsList();
         }
         return this.container;
+    }
+
+    update() {
+        if (this.container) {
+            while (this.container.firstChild) {
+                this.container.removeChild(this.container.firstChild);
+            }
+            this.keyDescriptions = KeyboardManagerInstance.actionKeysInfo;
+            this.fillOptionsList();
+        }
     }
 
     dispatchKeyEvents(event) {

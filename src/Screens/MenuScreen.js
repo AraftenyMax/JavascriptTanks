@@ -6,7 +6,7 @@ class MenuScreen extends Screen {
     static type = screenNames.menuScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
-    constructor(ResourceManager, sendIntent, moveNext, name,...args) {
+    constructor(ResourceManager, sendIntent, moveNext, fallBack, name,...args) {
         super(ResourceManager, sendIntent, moveNext, name);
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.menuItemsInfo = [

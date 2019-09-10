@@ -79,16 +79,16 @@ const ActionNames = {
     showKeySettings: 'showkeysettings',
     showMenu: 'showmenu'
 };
-const GameKeyCodes = [
+const ActionsInfo = [
     {name: ActionNames.moveUp, code: 38, action: 'Move up'},
     {name: ActionNames.moveDown, code: 40, action: 'Move down'},
     {name: ActionNames.moveLeft, code: 37, action: 'Move left'},
     {name: ActionNames.moveRight, code: 39, action: 'Move right'},
-    {name: ActionNames.shoot, code: 32, action: 'Pause game'},
-    {name: ActionNames.pause, code: 80, action: 'Show game menu(pauses game)'},
+    {name: ActionNames.shoot, code: 80, action: 'Pause game'},
+    {name: ActionNames.pause, code: 77, action: 'Show game menu(pauses game)'},
     {name: ActionNames.showKeySettings, code: 75, action: 'Show keyboard bindings'},
-    {name: ActionNames.showMenu, code: 27, action: 'Shoot'}
+    {name: ActionNames.showMenu, code: 32, action: 'Shoot'}
 ];
 
 const keyEvent = 'keydown';
-export {keyEvent, ActionNames, GameKeyCodes, KeyboardScheme};
+export {keyEvent, ActionNames, ActionsInfo, KeyboardScheme};

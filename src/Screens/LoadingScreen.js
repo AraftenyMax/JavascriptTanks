@@ -6,8 +6,8 @@ class LoadingScreen extends Screen {
     static type = screenNames.loadingScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
-    constructor(resourceManager, sendIntent, moveNext, name, ...args) {
-        super(resourceManager, sendIntent, moveNext, name, ...args);
+    constructor(resourceManager, sendIntent, moveNext, fallBack, name, ...args) {
+        super(resourceManager, sendIntent, moveNext, fallBack, name, ...args);
         this.container = null;
         this.isReady = false;
         this.msgDOMElement = null;

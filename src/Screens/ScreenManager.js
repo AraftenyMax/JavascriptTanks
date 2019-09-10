@@ -21,6 +21,7 @@ class ScreenManager {
         this.documentBody = document.getElementsByTagName('body')[0];
         this.sendIntent = this.sendIntent.bind(this);
         this.moveNext = this.moveNext.bind(this);
+        this.fallBack = this.fallBack.bind(this);
         this.findScreenParent(containerInfo);
     }
 
@@ -58,7 +59,7 @@ class ScreenManager {
         }
         let ScreenClass = this.screenClasses[screenName];
         let screenInstance = new ScreenClass(ResourceManagerInstance,
-            this.sendIntent, this.moveNext, screenName, ScreenClass.preferredWidth,
+            this.sendIntent, this.moveNext, this.fallBack, screenName, ScreenClass.preferredWidth,
             ScreenClass.preferredHeight, ...args);
         return screenInstance;
     }
@@ -87,7 +88,7 @@ class ScreenManager {
         this.screenStack.push(screen);
         this.documentBody.prepend(screenRender);
         screenRender.classList.add(modalWindowClass);
-        this.inputManager.unsubscribeInputEvent(screen.inputHandler);
+        this.inputManager.subscribeOnInputEvent(screen.inputHandler);
     }
 
     removeScreenFromStack(screenName) {
@@ -99,6 +100,7 @@ class ScreenManager {
     disposeScreen(screenName, ...args) {
         let screen = this.removeScreenFromStack(screenName);
         screen.dispose(...args);
+        this.inputManager.unsubscribeInputEvent(screen.inputHandler);
         this.screenParentContainer.removeChild(screen.getRender());
     }
 
@@ -113,14 +115,17 @@ class ScreenManager {
         }
     }
 
+    fallBack(currentScreenInfo, ...args) {
+        let {name, isModal} = currentScreenInfo;
+        this.disposeScreen(name);
+        let screen = this.screenStack[this.screenStack.length - 1];
+        screen.update();
+    }
+
     sendIntent(fromScreen, toScreen, ...args) {
         console.log(toScreen);
         let screen = this.screenStack.find((scr) => scr.name === toScreen);
         screen.receiveIntent(fromScreen, ...args);
-    }
-
-    showErrorMessage(msg, ...args) {
-
     }
 }
 

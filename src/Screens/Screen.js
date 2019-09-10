@@ -1,5 +1,5 @@
 class Screen {
-    constructor(ResourceManager, sendIntent, moveNext, name, width, height) {
+    constructor(ResourceManager, sendIntent, moveNext, fallBack, name, width, height) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -8,6 +8,7 @@ class Screen {
         this.ResourceManager = ResourceManager;
         this.sendIntent = sendIntent;
         this.moveNext = moveNext;
+        this.fallBack = fallBack;
     }
 
     getRender() {
@@ -19,6 +20,10 @@ class Screen {
     }
 
     receiveIntent() {
+
+    }
+
+    update() {
 
     }
 

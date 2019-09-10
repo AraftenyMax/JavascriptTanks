@@ -1,10 +1,10 @@
-import {ActionNames, GameKeyCodes, KeyboardScheme} from "../KeyboardSettings";
+import {ActionNames, ActionsInfo, KeyboardScheme} from "../KeyboardSettings";
 
 class KeyboardManager {
     constructor() {
         this._keysAvailableForBind = [...KeyboardScheme];
-        this._actionNames = [...ActionNames];
-        this._actionKeysInfo = [...GameKeyCodes];
+        this._actionNames = {...ActionNames};
+        this._actionKeysInfo = [...ActionsInfo];
     }
 
     get actionKeysInfo() {
@@ -12,7 +12,7 @@ class KeyboardManager {
     }
 
     isKeyFree(code) {
-        return this.isKeyAvailableForBind(code) && this.isKeyNotBindAlready(code);
+        return this.isKeyAvailableForBind(code) && !this.isKeyAlreadyBound(code);
     }
 
     isKeyAvailableForBind(code) {
@@ -20,15 +20,18 @@ class KeyboardManager {
         return !!key;
     }
 
-    bindKeyToAction(action, code) {
-        let index = this._actionKeysInfo.findIndex((key) => {
-            let { action: actionName } = key;
-            return action === actionName;
-        });
-        this._actionKeysInfo[index].code = code;
+    bindKeyToAction(name, code) {
+        if (!Object.values(this._actionNames).includes(name)) {
+            throw new Error(`Attempt to assign code to unknown action: ${name}`);
+        }
+        for (let keyInfo of this._actionKeysInfo) {
+            if (keyInfo.name === name) {
+                keyInfo.code = code;
+            }
+        }
     }
 
-    isKeyNotBindAlready(code) {
+    isKeyAlreadyBound(code) {
         let key = this.getActionKeyInfoByCode(code);
         return !!key;
     }
@@ -38,11 +41,20 @@ class KeyboardManager {
         return name;
     }
 
+    getKeyCodeByName(name) {
+        for (let keyInfo of this._keysAvailableForBind) {
+            let { name:keyName, code } = keyInfo;
+            if (name === keyName) {
+                return code;
+            }
+        }
+    }
+
     getKeyInfoByCode(code) {
         for (let keyInfo of this._keysAvailableForBind) {
             let { code:keyCode, name } = keyInfo;
             if (keyCode === code) {
-                return {code: keyCode, name};
+                return keyInfo;
             }
         }
         return null;
@@ -50,9 +62,9 @@ class KeyboardManager {
 
     getActionKeyInfoByCode(code) {
         for (let keyInfo of this._actionKeysInfo) {
-            let { code:keyCode, description, name } = keyInfo;
+            let { code:keyCode, action, name } = keyInfo;
             if (keyCode === code) {
-                return {code: keyCode, description, name};
+                return keyInfo;
             }
         }
         return null;
