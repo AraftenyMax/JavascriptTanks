@@ -1,14 +1,11 @@
 class Screen {
-    constructor(ResourceManager, sendIntent, moveNext, fallBack, name, width, height) {
+    constructor(name, width, height) {
         this.name = name;
         this.width = width;
         this.height = height;
         this.isModal = false;
         this.isActive = false;
-        this.ResourceManager = ResourceManager;
-        this.sendIntent = sendIntent;
-        this.moveNext = moveNext;
-        this.fallBack = fallBack;
+        this.container = null;
     }
 
     getRender() {

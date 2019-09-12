@@ -1,6 +1,6 @@
 import Screen from "./Screen";
-import {defaultWindowHeight, defaultWindowWidth, screenNames, selectedMenuItemClass} from "../Configuration";
-import {keyEvent} from "../KeyboardSettings";
+import {defaultWindowHeight, defaultWindowWidth, screenNames, selectedMenuItemClass} from "../Configuration/Configuration";
+import {keyEvent} from "../Configuration/KeyboardSettings";
 
 class MenuScreen extends Screen {
     static type = screenNames.menuScreen;

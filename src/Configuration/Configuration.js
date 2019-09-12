@@ -41,6 +41,14 @@ const resources = {
     }
 };
 
+const serviceNames = {
+    inputService: 'inputmanager',
+    keyboardService: 'keyboardmanager',
+    resourceService: 'resourcemanager',
+    missionsList: 'missionslist',
+    screenFlowCallbacks: 'screenflowcallbacks'
+};
+
 const cellSize = 40;
 const canvasWidth = 500;
 const canvasHeight = 500;
@@ -54,5 +62,5 @@ const modalWindowClass = 'modal-window';
 export {mapMarkers, resources, canvasWidth,
     canvasHeight, resourceNames, cellSize, screenElemSelectType, screenNames,
     selectedMenuItemClass, modalWindowClass, defaultModalHeight, defaultModalWidth,
-    defaultWindowWidth, defaultWindowHeight
+    defaultWindowWidth, defaultWindowHeight, serviceNames
 };

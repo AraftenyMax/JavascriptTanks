@@ -1,6 +1,6 @@
-import {ActionNames, ActionsInfo, KeyboardScheme} from "../KeyboardSettings";
+import {ActionNames, ActionsInfo, KeyboardScheme} from "../Configuration/KeyboardSettings";
 
-class KeyboardManager {
+class KeyboardService {
     constructor() {
         this._keysAvailableForBind = [...KeyboardScheme];
         this._actionNames = {...ActionNames};
@@ -71,5 +71,4 @@ class KeyboardManager {
     }
 }
 
-let KeyboardManagerInstance = new KeyboardManager();
-export default KeyboardManagerInstance;
+export default KeyboardService;

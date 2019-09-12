@@ -1,6 +1,8 @@
-import {keyEvent} from "../KeyboardSettings";
+import {keyEvent} from "../Configuration/KeyboardSettings";
+import {serviceNames} from "../Configuration/Configuration";
 
-class InputManager {
+class InputService {
+    static name = serviceNames.inputService;
     constructor(element=document) {
         this.subscribers = [];
         this.element = element;
@@ -47,7 +49,7 @@ class InputManager {
 
     switchMode(mode) {
         if (!Object.values(this.modes).includes(mode)) {
-            throw new Error('Unknown mode is set to InputManager.');
+            throw new Error('Unknown mode is set to InputService.');
         }
         this.mode = mode;
     }
@@ -60,4 +62,4 @@ class InputManager {
     }
 }
 
-export default InputManager;
+export default InputService;

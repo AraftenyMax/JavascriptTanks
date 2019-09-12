@@ -1,7 +1,6 @@
 import Screen from "./Screen";
-import {selectedMenuItemClass, screenNames, defaultWindowWidth, defaultWindowHeight} from "../Configuration";
-import {KeyboardScheme, ActionsInfo, ActionNames} from "../KeyboardSettings";
-import KeyboardManagerInstance from "../GameComponents/KeyboardManager";
+import {selectedMenuItemClass, screenNames, defaultWindowWidth, defaultWindowHeight} from "../Configuration/Configuration";
+import KeyboardManagerInstance from "../Services/KeyboardService";
 
 class OptionsScreen extends Screen {
     static type = screenNames.optionsScreen;
@@ -15,10 +14,10 @@ class OptionsScreen extends Screen {
         this.keyDescriptions = KeyboardManagerInstance.actionKeysInfo;
         this.menuDOMItems = [];
         this.keyCodes = {
-            enter: 13,
-            arrowUp: 38,
-            arrowDown: 40,
-            escape: 27
+            enter: KeyboardManagerInstance.getKeyCodeByName('Enter'),
+            arrowUp: KeyboardManagerInstance.getKeyCodeByName('Arrow Up'),
+            arrowDown: KeyboardManagerInstance.getKeyCodeByName('Arrow Down'),
+            escape: KeyboardManagerInstance.getKeyCodeByName('Escape')
         };
     }
 

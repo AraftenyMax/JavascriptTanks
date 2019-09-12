@@ -1,6 +1,6 @@
 import Screen from "./Screen";
-import {screenNames, defaultModalHeight, defaultModalWidth, modalWindowClass} from "../Configuration";
-import KeyboardManagerInstance from "../GameComponents/KeyboardManager";
+import {screenNames, defaultModalHeight, defaultModalWidth, modalWindowClass} from "../Configuration/Configuration";
+import KeyboardManagerInstance from "../Services/KeyboardService";
 
 class KeyBindingChangeScreen extends Screen {
     static type = screenNames.keyBindingChangeScreen;

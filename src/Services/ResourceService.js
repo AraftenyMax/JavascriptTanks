@@ -1,6 +1,6 @@
-import {resources} from '../Configuration';
+import {resources} from '../Configuration/Configuration';
 
-class ResourceManager {
+class ResourceService {
     constructor() {
         this.resources = {
             sprites: {},
@@ -40,6 +40,4 @@ class ResourceManager {
     }
 }
 
-let ResourceManagerInstance = new ResourceManager();
-
-export default ResourceManagerInstance;
+export default ResourceService;

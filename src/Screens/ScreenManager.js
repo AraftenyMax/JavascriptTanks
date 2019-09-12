@@ -1,16 +1,19 @@
-import {screenElemSelectType, modalWindowClass} from "../Configuration";
+import {screenElemSelectType, modalWindowClass, serviceNames} from "../Configuration/Configuration";
 import LoadingScreen from "./LoadingScreen";
 import MenuScreen from "./MenuScreen";
 import OptionsScreen from './OptionsScreen';
 import KeyBindingChangeScreen from "./KeyBindingChangeScreen";
-import InputManager from "../GameComponents/InputManager";
-import ResourceManagerInstance from "../GameComponents/ResourceManager";
+import InputService from "../Services/InputService";
+import ResourceManagerInstance from "../Services/ResourceService";
 
 class ScreenManager {
-    constructor(resourceManager, containerInfo = {}) {
-        this.resourceManager = resourceManager;
+    constructor(serviceManager, containerInfo = {}) {
+        this.sendIntent = this.sendIntent.bind(this);
+        this.moveNext = this.moveNext.bind(this);
+        this.fallBack = this.fallBack.bind(this);
+        this.serviceManager = serviceManager;
+        this.inputManager = this.serviceManager.dependencies[serviceNames.inputService];
         this.screenStack = [];
-        this.inputManager = new InputManager();
         this.screenClasses = {
             [LoadingScreen.type]: LoadingScreen,
             [MenuScreen.type]: MenuScreen,
@@ -19,9 +22,6 @@ class ScreenManager {
         };
         this.screenParentContainer = null;
         this.documentBody = document.getElementsByTagName('body')[0];
-        this.sendIntent = this.sendIntent.bind(this);
-        this.moveNext = this.moveNext.bind(this);
-        this.fallBack = this.fallBack.bind(this);
         this.findScreenParent(containerInfo);
     }
 
@@ -58,8 +58,8 @@ class ScreenManager {
             throw new Error(`Attempt to start screen which already is present: ${screenName}`);
         }
         let ScreenClass = this.screenClasses[screenName];
-        let screenInstance = new ScreenClass(ResourceManagerInstance,
-            this.sendIntent, this.moveNext, this.fallBack, screenName, ScreenClass.preferredWidth,
+        let dependencies = this.serviceManager.resolveDependencies(ScreenClass.dependencies);
+        let screenInstance = new ScreenClass(dependencies, screenName, ScreenClass.preferredWidth,
             ScreenClass.preferredHeight, ...args);
         return screenInstance;
     }

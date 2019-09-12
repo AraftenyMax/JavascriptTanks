@@ -1,23 +1,25 @@
 import Screen from './Screen';
-import {screenNames, defaultWindowWidth, defaultWindowHeight} from "../Configuration";
-import {keyEvent} from "../KeyboardSettings";
+import {screenNames, defaultWindowWidth, defaultWindowHeight, serviceNames} from "../Configuration/Configuration";
+import {keyEvent} from "../Configuration/KeyboardSettings";
 
 class LoadingScreen extends Screen {
     static type = screenNames.loadingScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
-    constructor(resourceManager, sendIntent, moveNext, fallBack, name, ...args) {
-        super(resourceManager, sendIntent, moveNext, fallBack, name, ...args);
+    static dependencies = [serviceNames.keyboardService];
+    constructor(dependencies, name, ...args) {
+        super(name, ...args);
         this.container = null;
         this.isReady = false;
         this.msgDOMElement = null;
+        this.keyboardService = dependencies[serviceNames.keyboardService];
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.texts = {
             loading: 'Loading...',
             ready: 'Ready. Press space to continue.'
         };
         this.keyCodeEvents = {
-            space: 32
+            space: this.keyboardService.getKeyCodeByName('Space')
         };
     }
 

@@ -1,4 +1,4 @@
-import {cellSize} from '../Configuration';
+import {cellSize} from '../Configuration/Configuration';
 
 class RenderObject {
     constructor(sprite, width = cellSize, height = cellSize) {
