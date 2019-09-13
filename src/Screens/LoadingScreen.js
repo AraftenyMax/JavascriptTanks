@@ -7,19 +7,19 @@ class LoadingScreen extends Screen {
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
     static dependencies = [serviceNames.keyboardService];
-    constructor(dependencies, name, ...args) {
+    constructor(services, name, ...args) {
         super(name, ...args);
+        this.keyboardService = services[serviceNames.keyboardService];
+        this.keyCodeEvents = {
+            space: this.keyboardService.getKeyCodeByName('Space'),
+        };
         this.container = null;
         this.isReady = false;
         this.msgDOMElement = null;
-        this.keyboardService = dependencies[serviceNames.keyboardService];
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.texts = {
             loading: 'Loading...',
             ready: 'Ready. Press space to continue.'
-        };
-        this.keyCodeEvents = {
-            space: this.keyboardService.getKeyCodeByName('Space')
         };
     }
 

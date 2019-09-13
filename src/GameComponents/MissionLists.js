@@ -1,11 +1,13 @@
 import {MissionsData} from "../Configuration/MissionsData";
 import Mission from "./Mission";
+import {serviceNames} from "../Configuration/Configuration";
 
 class MissionLists {
     constructor() {
         this.missionsList = [];
         this.missionNames = [];
         this._initMissionList();
+        this.name = serviceNames.missionsList;
     }
 
     _initMissionList() {

@@ -1,10 +1,12 @@
 import {ActionNames, ActionsInfo, KeyboardScheme} from "../Configuration/KeyboardSettings";
+import {serviceNames} from "../Configuration/Configuration";
 
 class KeyboardService {
     constructor() {
         this._keysAvailableForBind = [...KeyboardScheme];
         this._actionNames = {...ActionNames};
         this._actionKeysInfo = [...ActionsInfo];
+        this.name = serviceNames.keyboardService;
     }
 
     get actionKeysInfo() {

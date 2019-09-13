@@ -23,10 +23,6 @@ class Game {
             this.screenManager.sendIntent(null, screenNames.loadingScreen, {isReady: true});
         });
     }
-
-    start() {
-        this.screenManager.showLoadingScreen();
-    }
 }
 
 export default Game;

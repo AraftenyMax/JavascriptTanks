@@ -1,4 +1,4 @@
-import {resources} from '../Configuration/Configuration';
+import {resources, serviceNames} from '../Configuration/Configuration';
 
 class ResourceService {
     constructor() {
@@ -10,6 +10,7 @@ class ResourceService {
             console.log('Done', this.resources.sprites);
             console.log('Now done.');
         });
+        this.name = serviceNames.resourceService;
     }
 
     async loadResources() {

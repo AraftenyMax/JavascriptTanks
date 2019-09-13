@@ -12,7 +12,7 @@ class ScreenManager {
         this.moveNext = this.moveNext.bind(this);
         this.fallBack = this.fallBack.bind(this);
         this.serviceManager = serviceManager;
-        this.inputManager = this.serviceManager.dependencies[serviceNames.inputService];
+        this.inputManager = this.serviceManager.getInstance(serviceNames.inputService);
         this.screenStack = [];
         this.screenClasses = {
             [LoadingScreen.type]: LoadingScreen,

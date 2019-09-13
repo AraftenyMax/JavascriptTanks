@@ -2,7 +2,6 @@ import {keyEvent} from "../Configuration/KeyboardSettings";
 import {serviceNames} from "../Configuration/Configuration";
 
 class InputService {
-    static name = serviceNames.inputService;
     constructor(element=document) {
         this.subscribers = [];
         this.element = element;
@@ -10,6 +9,7 @@ class InputService {
             singleScreen: 0,
             manyScreens: 1
         };
+        this.name = serviceNames.inputService;
         this.mode = this.modes.singleScreen;
         this.notifyCallback = (...args) => this.notify(...args);
         this.addEventHandler();

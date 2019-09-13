@@ -10,17 +10,24 @@ class ServiceManager {
         this.dependencyInstances[serviceNames.screenFlowCallbacks] = callbacks;
     }
 
-    resolveDependencies(screenName, requiredDependencies) {
-        let dependencies = [];
+    getInstance(name) {
+        if (!Object.values(serviceNames).includes(name)) {
+            throw new Error(`Attempt to get instance of unknown service: ${name}`)
+        }
+        return this.dependencyInstances[name];
+    }
+
+    resolveDependencies(requiredDependencies) {
+        let dependencies = {};
         if (requiredDependencies.length === 0){
             return null;
         }
         for (let dependencyName of requiredDependencies) {
             if (!Object.values(serviceNames).includes(dependencyName)) {
-                throw new Error(`Unknown dependency name: ${dependencyName} for screen: ${screenName}`);
+                throw new Error(`Unknown dependency name: ${dependencyName}`);
             }
             let dependencyInstance = this.dependencyInstances[dependencyName];
-            dependencies.push(dependencyInstance);
+            dependencies[dependencyInstance.name] = dependencyInstance;
         }
         return dependencies;
     }
