@@ -1,8 +1,8 @@
-import {defaultWindowHeight, defaultWindowWidth, screenNames} from "../Configuration/Configuration";
-import KeyboardManagerInstance from "../Services/KeyboardService";
+import {defaultWindowHeight, defaultWindowWidth, SCREENS} from "../Configuration/Configuration";
+import KeyboardManagerInstance from "../Services/KeyboardManager";
 
 class MissionSelectScreen extends Screen {
-    static type = screenNames.missionSelectScreen;
+    static type = SCREENS.missionSelectScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
     constructor(ResourceManager, sendIntent, moveNext, fallBack, name, ...args) {

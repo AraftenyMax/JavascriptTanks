@@ -1,4 +1,4 @@
-const screenNames = {
+const SCREENS = {
     loadingScreen: 'loadingscreen',
     menuScreen: 'menuscreen',
     missionSelectScreen: 'missionselectscreen',
@@ -41,12 +41,15 @@ const resources = {
     }
 };
 
-const serviceNames = {
+const SERVICES = {
     inputService: 'inputmanager',
     keyboardService: 'keyboardmanager',
     resourceService: 'resourcemanager',
     missionsList: 'missionslist',
-    screenFlowCallbacks: 'screenflowcallbacks'
+    screenFlowCallbacks: 'screenflowcallbacks',
+    screenProvider: 'screenprovider',
+    screenRenderer: 'screenrenderer',
+    screenManager: 'screenmanager'
 };
 
 const cellSize = 40;
@@ -60,7 +63,7 @@ const selectedMenuItemClass = 'selected-menu-item';
 const modalWindowClass = 'modal-window';
 
 export {mapMarkers, resources, canvasWidth,
-    canvasHeight, resourceNames, cellSize, screenElemSelectType, screenNames,
+    canvasHeight, resourceNames, cellSize, screenElemSelectType, SCREENS,
     selectedMenuItemClass, modalWindowClass, defaultModalHeight, defaultModalWidth,
-    defaultWindowWidth, defaultWindowHeight, serviceNames
+    defaultWindowWidth, defaultWindowHeight, SERVICES
 };

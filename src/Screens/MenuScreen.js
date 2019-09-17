@@ -1,30 +1,37 @@
 import Screen from "./Screen";
-import {defaultWindowHeight, defaultWindowWidth, screenNames, selectedMenuItemClass} from "../Configuration/Configuration";
+import {
+    defaultWindowHeight,
+    defaultWindowWidth,
+    SCREENS,
+    selectedMenuItemClass,
+    SERVICES
+} from "../Configuration/Configuration";
 import {keyEvent} from "../Configuration/KeyboardSettings";
 
 class MenuScreen extends Screen {
-    static type = screenNames.menuScreen;
+    static type = SCREENS.menuScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
-    constructor(ResourceManager, sendIntent, moveNext, fallBack, name,...args) {
-        super(ResourceManager, sendIntent, moveNext, name);
+    constructor(serviceLocator, name,...args) {
+        super(name, ...args);
+        this.screenManager = serviceLocator.getService(SERVICES.screenManager);
         this.inputHandler = (...args) => this.dispatchKeyEvents(...args);
         this.menuItemsInfo = [
             {
                 text: 'Play',
-                nextScreenName: screenNames.missionSelectScreen
+                nextScreenName: SCREENS.missionSelectScreen
             },
             {
                 text: 'Statistics',
-                nextScreenName: screenNames.statisticsScreen
+                nextScreenName: SCREENS.statisticsScreen
             },
             {
                 text: 'Settings',
-                nextScreenName: screenNames.optionsScreen
+                nextScreenName: SCREENS.optionsScreen
             },
             {
                 text:'Upgrade tank',
-                nextScreenName: screenNames.upgradeScreen
+                nextScreenName: SCREENS.upgradeScreen
             }
         ];
         this.menuDOMItems = [];
@@ -71,7 +78,7 @@ class MenuScreen extends Screen {
             name: nextScreenName,
             isModal: isModal
         };
-        this.moveNext(currentScreenInfo, nextScreenInfo);
+        this.screenManager.showScreen();
     }
 
     getRender() {

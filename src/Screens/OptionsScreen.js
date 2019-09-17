@@ -1,9 +1,9 @@
 import Screen from "./Screen";
-import {selectedMenuItemClass, screenNames, defaultWindowWidth, defaultWindowHeight} from "../Configuration/Configuration";
-import KeyboardManagerInstance from "../Services/KeyboardService";
+import {selectedMenuItemClass, SCREENS, defaultWindowWidth, defaultWindowHeight} from "../Configuration/Configuration";
+import KeyboardManagerInstance from "../Services/KeyboardManager";
 
 class OptionsScreen extends Screen {
-    static type = screenNames.optionsScreen;
+    static type = SCREENS.optionsScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
     constructor(resourceManager, sendIntent, moveNext, fallBack, name, ...args) {
@@ -29,7 +29,7 @@ class OptionsScreen extends Screen {
     escapeHandler() {
         let currentScreenInfo = this.screenInfo;
         let nextScreenInfo = {
-            name: screenNames.menuScreen,
+            name: SCREENS.menuScreen,
             isModal: false
         };
         this.moveNext(currentScreenInfo, nextScreenInfo);
@@ -62,7 +62,7 @@ class OptionsScreen extends Screen {
         let args = {
             code: code
         };
-        let nextScreenName = screenNames.keyBindingChangeScreen;
+        let nextScreenName = SCREENS.keyBindingChangeScreen;
         let currentScreenInfo = this.screenInfo;
         let nextScreenInfo = {
             name: nextScreenName,

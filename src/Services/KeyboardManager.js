@@ -1,12 +1,12 @@
 import {ActionNames, ActionsInfo, KeyboardScheme} from "../Configuration/KeyboardSettings";
-import {serviceNames} from "../Configuration/Configuration";
+import {SERVICES} from "../Configuration/Configuration";
 
-class KeyboardService {
+class KeyboardManager {
     constructor() {
         this._keysAvailableForBind = [...KeyboardScheme];
         this._actionNames = {...ActionNames};
         this._actionKeysInfo = [...ActionsInfo];
-        this.name = serviceNames.keyboardService;
+        this.name = SERVICES.keyboardService;
     }
 
     get actionKeysInfo() {
@@ -73,4 +73,4 @@ class KeyboardService {
     }
 }
 
-export default KeyboardService;
+export default KeyboardManager;

@@ -1,6 +1,6 @@
-import {resources, serviceNames} from '../Configuration/Configuration';
+import {resources, SERVICES} from '../Configuration/Configuration';
 
-class ResourceService {
+class ResourceManager {
     constructor() {
         this.resources = {
             sprites: {},
@@ -10,7 +10,7 @@ class ResourceService {
             console.log('Done', this.resources.sprites);
             console.log('Now done.');
         });
-        this.name = serviceNames.resourceService;
+        this.name = SERVICES.resourceService;
     }
 
     async loadResources() {
@@ -41,4 +41,4 @@ class ResourceService {
     }
 }
 
-export default ResourceService;
+export default ResourceManager;

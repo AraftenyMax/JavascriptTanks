@@ -1,6 +1,6 @@
 import Tank from "./Tank";
 import RenderObject from '../Render/RenderObject';
-import ResourceManagerInstance from '../Services/ResourceService';
+import ResourceManagerInstance from '../Services/ResourceManager';
 import {resourceNames} from '../Configuration/Configuration';
 
 class Player extends Tank {

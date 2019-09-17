@@ -1,7 +1,8 @@
 import {keyEvent} from "../Configuration/KeyboardSettings";
-import {serviceNames} from "../Configuration/Configuration";
+import {SERVICES} from "../Configuration/Configuration";
+import Factory from "../ServiceManager/Factory/Factory";
 
-class InputService {
+class InputManager {
     constructor(element=document) {
         this.subscribers = [];
         this.element = element;
@@ -9,7 +10,7 @@ class InputService {
             singleScreen: 0,
             manyScreens: 1
         };
-        this.name = serviceNames.inputService;
+        this.name = SERVICES.inputService;
         this.mode = this.modes.singleScreen;
         this.notifyCallback = (...args) => this.notify(...args);
         this.addEventHandler();
@@ -49,7 +50,7 @@ class InputService {
 
     switchMode(mode) {
         if (!Object.values(this.modes).includes(mode)) {
-            throw new Error('Unknown mode is set to InputService.');
+            throw new Error('Unknown mode is set to InputManager.');
         }
         this.mode = mode;
     }
@@ -62,4 +63,4 @@ class InputService {
     }
 }
 
-export default InputService;
+export default InputManager;

@@ -1,15 +1,14 @@
 import Screen from './Screen';
-import {screenNames, defaultWindowWidth, defaultWindowHeight, serviceNames} from "../Configuration/Configuration";
-import {keyEvent} from "../Configuration/KeyboardSettings";
+import {SCREENS, defaultWindowWidth, defaultWindowHeight, SERVICES} from "../Configuration/Configuration";
 
 class LoadingScreen extends Screen {
-    static type = screenNames.loadingScreen;
+    static type = SCREENS.loadingScreen;
     static preferredWidth = defaultWindowWidth;
     static preferredHeight = defaultWindowHeight;
-    static dependencies = [serviceNames.keyboardService];
-    constructor(services, name, ...args) {
+    constructor(serviceLocator, name, ...args) {
         super(name, ...args);
-        this.keyboardService = services[serviceNames.keyboardService];
+        this.screenManager = serviceLocator.getService(SERVICES.screenManager);
+        this.keyboardService = serviceLocator.getService(SERVICES.keyboardService);
         this.keyCodeEvents = {
             space: this.keyboardService.getKeyCodeByName('Space'),
         };
@@ -28,10 +27,9 @@ class LoadingScreen extends Screen {
         if (this.isReady) {
             let currentScreenInfo = this.screenInfo;
             let nextScreenInfo = {
-                name: screenNames.menuScreen,
+                name: SCREENS.menuScreen,
                 isModal: false
             };
-            this.moveNext(currentScreenInfo, nextScreenInfo);
         }
     }
 
@@ -47,7 +45,6 @@ class LoadingScreen extends Screen {
     }
 
     receiveIntent(from, args) {
-        super.receiveIntent();
         let { isReady } = args;
         if (isReady) {
             this.isReady = isReady;
